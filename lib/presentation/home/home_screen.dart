@@ -1,12 +1,16 @@
 import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/components/delayed_action.dart';
-import 'package:films_viewer/data/repositories/movies_repository.dart';
 import 'package:films_viewer/domain/models/home_model.dart';
+import 'package:films_viewer/presentation/home/bloc/home_bloc.dart';
+import 'package:films_viewer/presentation/home/bloc/home_event.dart';
+import 'package:films_viewer/presentation/home/bloc/home_state.dart';
 import 'package:films_viewer/presentation/home/movie_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  static final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey();
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,20 +19,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController textController = TextEditingController();
   Future<HomeModel?>? dataLoadingState;
-  Future<void> _onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 1000));
-  }
 
   @override
   void didChangeDependencies() {
-    dataLoadingState ??=
-        MoviesRepository.loadData(context, q: MovieQuery.initialQ);
+    context.read<HomeBloc>().add(LoadDataEvent());
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      key: HomeScreen.globalKey,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: MovieColors.backgroundBlackColor,
@@ -47,35 +48,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 onChanged: _onSearchFieldTextChanged,
               ),
             ),
-            FutureBuilder<HomeModel?>(
-              future: dataLoadingState,
-              builder: (BuildContext context, AsyncSnapshot<HomeModel?> data) {
-                return data.connectionState != ConnectionState.done
-                    ? const Center(child: CircularProgressIndicator())
-                    : data.hasData
-                        ? data.data?.results?.isNotEmpty == true
-                            ? Expanded(
-                                child: RefreshIndicator(
-                                  child: ListView.builder(
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return MovieCard(
-                                        movieCardModel:
-                                            data.data?.results?[index],
-                                        key: ValueKey<int>(
-                                            data.data?.results?[index].id ??
-                                                -1),
-                                      );
-                                    },
-                                    itemCount: data.data?.results?.length ?? 0,
-                                  ),
-                                  onRefresh: _onRefresh,
-                                ),
-                              )
-                            : const _Empty()
-                        : const _Error();
-              },
-            ),
+            BlocBuilder<HomeBloc, HomeState>(
+                buildWhen: (oldState, newState) =>
+                    oldState.data != newState.data,
+                builder: (context, state) {
+                  return FutureBuilder<HomeModel?>(
+                    future: state.data,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<HomeModel?> data) {
+                      return data.connectionState != ConnectionState.done
+                          ? const Center(child: CircularProgressIndicator())
+                          : data.hasData
+                              ? data.data?.results?.isNotEmpty == true
+                                  ? Expanded(
+                                      child: RefreshIndicator(
+                                        child: ListView.builder(
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return MovieCard(
+                                              movieCardModel:
+                                                  data.data?.results?[index],
+                                              key: ValueKey<int>(data.data
+                                                      ?.results?[index].id ??
+                                                  -1),
+                                            );
+                                          },
+                                          itemCount:
+                                              data.data?.results?.length ?? 0,
+                                        ),
+                                        onRefresh: _onRefresh,
+                                      ),
+                                    )
+                                  : const _Empty()
+                              : const _Error();
+                    },
+                  );
+                })
           ],
         ),
       ),
@@ -84,11 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onSearchFieldTextChanged(String text) {
     DelayedAction.run(() {
-      dataLoadingState = MoviesRepository.loadData(
-        context,
-        q: text.isNotEmpty ? text : MovieQuery.initialQ,
-      );
-      setState(() {});
+      context.read<HomeBloc>().add(SearchChangedEvent(search: text));
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    DelayedAction.run(() {
+      context.read<HomeBloc>().add(PullToRefreshEvent());
     });
   }
 }
