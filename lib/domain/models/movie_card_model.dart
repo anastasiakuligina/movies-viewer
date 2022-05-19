@@ -1,3 +1,5 @@
+import 'package:films_viewer/data/db/database.dart';
+
 class MovieCardModel {
   final int id;
   final String title;
@@ -17,4 +19,30 @@ class MovieCardModel {
     this.language,
     this.runtime,
   });
+}
+
+extension MovieCardModelToDatabase on MovieCardModel {
+  MovieTableData toDatabase() {
+    return MovieTableData(
+      id: id,
+      title: title,
+      picture: picture,
+      releaseDate: releaseDate,
+      voteAverage: voteAverage,
+      description: description,
+    );
+  }
+}
+
+extension MovieTableDataToDomain on MovieTableData {
+  MovieCardModel toDomain() {
+    return MovieCardModel(
+      id: id,
+      title: title,
+      picture: picture,
+      releaseDate: releaseDate,
+      voteAverage: voteAverage,
+      description: description,
+    );
+  }
 }

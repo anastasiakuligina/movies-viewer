@@ -25,6 +25,8 @@ class MovieLocal {
   static const String language = 'Язык';
   static const String runtime = 'Длительность серии';
   static const String min = 'мин';
+  static const String deleteFromFavourites = 'Удалить из избранного';
+  static const String addInFavourites = 'Добавить в избранное';
 }
 
 class MoviePictures {

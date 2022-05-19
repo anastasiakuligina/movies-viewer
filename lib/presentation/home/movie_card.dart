@@ -1,3 +1,4 @@
+import 'package:films_viewer/components/buttons/primary_button.dart';
 import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/domain/models/movie_card_model.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,14 @@ import 'package:flutter_html/flutter_html.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieCardModel? movieCardModel;
-  const MovieCard({this.movieCardModel, Key? key}) : super(key: key);
+  final VoidCallback? onClickFavourite;
+  final String textButton;
+  const MovieCard({
+    this.movieCardModel,
+    this.onClickFavourite,
+    required this.textButton,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +76,13 @@ class MovieCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 10),
             child: Html(data: movieCardModel?.description ?? ''),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: PrimaryButton(textButton, onPressed: () {
+              onClickFavourite?.call();
+            }),
+          ),
         ],
       ),
     );

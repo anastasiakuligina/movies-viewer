@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
+import 'package:films_viewer/data/db/database.dart';
 import 'package:films_viewer/data/dtos/movie_card_dto.dart';
 import 'package:films_viewer/domain/models/home_model.dart';
 import 'package:films_viewer/domain/models/movie_card_model.dart';
@@ -10,6 +12,7 @@ import 'package:films_viewer/data/repositories/interceptors/dio_error_intercepto
 class MoviesRepository {
   final Function(String, String) onErrorHandler;
   late final Dio _dio;
+  late final Database _db;
   MoviesRepository({required this.onErrorHandler}) {
     _dio = Dio()
       ..interceptors.addAll([
@@ -19,6 +22,7 @@ class MoviesRepository {
         ),
         ErrorInterceptor(onErrorHandler),
       ]);
+    _db = Database();
   }
   Future<HomeModel?> loadData({
     required String q,
@@ -40,5 +44,31 @@ class MoviesRepository {
     }
     final HomeModel model = HomeModel(results: movieModels);
     return model;
+  }
+
+  Future<List<MovieCardModel>> getAllMoviesDB() async {
+    List<MovieTableData> moviesDB = await _db.select(_db.movieTable).get();
+    return moviesDB
+        .map((MovieTableData movieTableData) => movieTableData.toDomain())
+        .toList();
+  }
+
+  Future<void> insertMovieDB(MovieCardModel movieCardModel) async {
+    await _db.into(_db.movieTable).insert(
+          movieCardModel.toDatabase(),
+          mode: InsertMode.insertOrReplace,
+        );
+  }
+
+  Future<void> deleteMovieDB(int id) async {
+    await (_db.delete(_db.movieTable)
+          ..where((movieTable) => movieTable.id.equals(id)))
+        .go();
+  }
+
+  Stream<List<MovieCardModel>> onChangedMoviesDB() {
+    return (_db.select(_db.movieTable))
+        .map((MovieTableData movieTableData) => movieTableData.toDomain())
+        .watch();
   }
 }
