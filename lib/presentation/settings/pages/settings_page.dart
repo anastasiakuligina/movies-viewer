@@ -2,6 +2,7 @@ import 'package:films_viewer/components/buttons/primary_button.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_bloc.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_event.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

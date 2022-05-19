@@ -1,6 +1,9 @@
 import 'package:films_viewer/components/widgets/empty_page.dart';
+import 'package:films_viewer/domain/models/movie_card_model.dart';
+import 'package:films_viewer/presentation/detail_page.dart';
 import 'package:films_viewer/presentation/main_page.dart';
 import 'package:films_viewer/presentation/movies/movies_screen.dart';
+import 'package:films_viewer/presentation/settings/pages/settings_detail_page.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -33,29 +36,24 @@ class MyApp extends StatelessWidget {
             return const MoviesScreen();
           });
         }
+        if (settings.name == DetailPage.routeName) {
+          final MovieCardModel arguments = settings.arguments as MovieCardModel;
+          return MaterialPageRoute(builder: (context) {
+            return DetailPage(model: arguments);
+          });
+        }
+        if (settings.name == SettingsDetailPage.path) {
+          final MovieCardModel arguments = settings.arguments as MovieCardModel;
+          return MaterialPageRoute(builder: (context) {
+            return SettingsDetailPage(
+              model: arguments,
+            );
+          });
+        }
         return MaterialPageRoute(builder: (context) {
           return const EmptyPage();
         });
       },
-      // home: BlocProvider<ErrorBloc>(
-      //     lazy: false,
-      //     create: (_) => ErrorBloc(),
-      //     child: RepositoryProvider<MoviesRepository>(
-      //       lazy: true,
-      //       create: (BuildContext context) => MoviesRepository(
-      //         onErrorHandler: (String code, String message) {
-      //           context
-      //               .read<ErrorBloc>()
-      //               .add(ShowDialogEvent(title: code, message: message));
-      //         },
-      //       ),
-      //       child: BlocProvider<HomeBloc>(
-      //         lazy: false,
-      //         create: (BuildContext context) =>
-      //             HomeBloc(context.read<MoviesRepository>()),
-      //         child: const HomeScreen(),
-      //       ),
-      //     )),
     );
   }
 }

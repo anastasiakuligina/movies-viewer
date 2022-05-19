@@ -27,6 +27,9 @@ class MovieLocal {
   static const String min = 'мин';
   static const String deleteFromFavourites = 'Удалить из избранного';
   static const String addInFavourites = 'Добавить в избранное';
+  static const String releaseDate = 'Дата выхода';
+  static const String noDataTitle = 'Нет данных';
+  static const String getDataButtonTitle = 'Получить данные';
 }
 
 class MoviePictures {

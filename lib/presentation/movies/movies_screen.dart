@@ -20,6 +20,12 @@ class MoviesScreen extends StatefulWidget {
 class _MoviesScreenState extends State<MoviesScreen> {
   final TextEditingController textController = TextEditingController();
   @override
+  void didChangeDependencies() {
+    context.read<HomeBloc>().add(LoadDataEvent());
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(

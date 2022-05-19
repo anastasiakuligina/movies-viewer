@@ -18,74 +18,78 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      margin: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white54,
-        borderRadius: const BorderRadius.all(Radius.circular(25)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black54.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: const Offset(0, 2), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          ClipRRect(
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, '/detail', arguments: movieCardModel);
+        },
+        child: Container(
+          width: 300,
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white54,
             borderRadius: const BorderRadius.all(Radius.circular(25)),
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: MovieColors.cardBlackColor,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black54.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: const Offset(0, 2), // changes position of shadow
               ),
-              child: CachedNetworkImage(
-                imageUrl: '${movieCardModel?.picture}',
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) =>
-                    Image.network(MovieQuery.pisecImageUrl),
-                cacheManager: MoviePictures.pictureCache,
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
+                child: Container(
+                  height: 300,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: MovieColors.cardBlackColor,
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: '${movieCardModel?.picture}',
+                    fit: BoxFit.cover,
+                    errorWidget: (_, __, ___) =>
+                        Image.network(MovieQuery.pisecImageUrl),
+                    cacheManager: MoviePictures.pictureCache,
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+                child: Text(
+                  '${movieCardModel?.title} (${movieCardModel?.releaseDate})',
+                  textAlign: TextAlign.justify,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              Text(
+                _voteAverage(movieCardModel?.voteAverage ?? 0),
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                '${MovieLocal.language}: ${movieCardModel?.language}',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                  '${MovieLocal.runtime}: ${movieCardModel?.runtime.toString()} ${MovieLocal.min}'),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 10),
+                child: Html(data: movieCardModel?.description ?? ''),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: PrimaryButton(textButton, onPressed: () {
+                  onClickFavourite?.call();
+                }),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: Text(
-              '${movieCardModel?.title} (${movieCardModel?.releaseDate})',
-              textAlign: TextAlign.justify,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-          ),
-          Text(
-            _voteAverage(movieCardModel?.voteAverage ?? 0),
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Text(
-            '${MovieLocal.language}: ${movieCardModel?.language}',
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Text(
-              '${MovieLocal.runtime}: ${movieCardModel?.runtime.toString()} ${MovieLocal.min}'),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, bottom: 10),
-            child: Html(data: movieCardModel?.description ?? ''),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: PrimaryButton(textButton, onPressed: () {
-              onClickFavourite?.call();
-            }),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   String _voteAverage(double voteAverage) {

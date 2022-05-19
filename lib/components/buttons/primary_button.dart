@@ -30,18 +30,5 @@ class PrimaryButton extends StatelessWidget {
         ),
       ),
     );
-    // return ClipRRect(
-    //   borderRadius: BorderRadius.circular(20),
-    //   child: ColoredBox(
-    //     color: Theme.of(context).primaryColor,
-    //     child: Padding(
-    //       padding: const EdgeInsets.all(16),
-    //       child: Text(
-    //         title,
-    //         style: Theme.of(context).textTheme.button?.copyWith(color: Colors.white, fontSize: 20),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
