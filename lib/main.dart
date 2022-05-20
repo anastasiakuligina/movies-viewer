@@ -1,6 +1,6 @@
 import 'package:films_viewer/components/widgets/empty_page.dart';
-import 'package:films_viewer/domain/models/movie_card_model.dart';
 import 'package:films_viewer/presentation/detail_page.dart';
+import 'package:films_viewer/presentation/home/movie_card.dart';
 import 'package:films_viewer/presentation/main_page.dart';
 import 'package:films_viewer/presentation/movies/movies_screen.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_detail_page.dart';
@@ -37,16 +37,18 @@ class MyApp extends StatelessWidget {
           });
         }
         if (settings.name == DetailPage.routeName) {
-          final MovieCardModel arguments = settings.arguments as MovieCardModel;
+          final SettingsArgument arguments =
+              settings.arguments as SettingsArgument;
           return MaterialPageRoute(builder: (context) {
-            return DetailPage(model: arguments);
+            return DetailPage(settingsArguments: arguments);
           });
         }
         if (settings.name == SettingsDetailPage.path) {
-          final MovieCardModel arguments = settings.arguments as MovieCardModel;
+          final SettingsArgument arguments =
+              settings.arguments as SettingsArgument;
           return MaterialPageRoute(builder: (context) {
             return SettingsDetailPage(
-              model: arguments,
+              arguments: arguments,
             );
           });
         }

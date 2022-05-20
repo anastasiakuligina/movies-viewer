@@ -2,6 +2,7 @@ import 'package:films_viewer/components/buttons/primary_button.dart';
 import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/components/widgets/film_tile.dart';
 import 'package:films_viewer/domain/models/movie_card_model.dart';
+import 'package:films_viewer/presentation/home/movie_card.dart';
 import 'package:films_viewer/presentation/settings/bloc/detail_setting_bloc.dart';
 import 'package:films_viewer/presentation/settings/bloc/detail_setting_event.dart';
 import 'package:films_viewer/presentation/settings/bloc/detail_setting_state.dart';
@@ -11,15 +12,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
 class SettingsDetailPage extends StatelessWidget {
-  SettingsDetailPage({required this.model, Key? key}) : super(key: key);
+  SettingsDetailPage({required this.arguments, Key? key}) : super(key: key);
   static const path = '/detailSettings';
-  late MovieCardModel model;
+  // late MovieCardModel model;
+  late SettingsArgument arguments;
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DetailSettingBloc>(
       lazy: false,
       create: (_) => DetailSettingBloc()..add(ClearDetailPageEvent()),
-      child: SettingsDetailPageContent(model),
+      child: SettingsDetailPageContent(arguments.model as MovieCardModel),
     );
   }
 }
@@ -58,6 +60,7 @@ class _SettingsDetailPageContentState extends State<SettingsDetailPageContent> {
                       description: state.model?.description ?? '',
                       language: state.model?.language,
                       checkable: false,
+                      isFavorite: state.model?.isFavorite ?? false,
                     );
                   } else {
                     return const Text(

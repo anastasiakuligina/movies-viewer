@@ -94,6 +94,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                                               }
                                             }
                                             return MovieCard(
+                                              isFavorite: isFavourite,
                                               textButton: (isFavourite)
                                                   ? MovieLocal
                                                       .deleteFromFavourites

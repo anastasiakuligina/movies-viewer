@@ -1,11 +1,7 @@
 import 'package:films_viewer/components/constants.dart';
-import 'package:films_viewer/domain/models/home_model.dart';
 import 'package:films_viewer/presentation/favourite/favourite_screen.dart';
-import 'package:films_viewer/presentation/home/bloc/home_bloc.dart';
-import 'package:films_viewer/presentation/home/bloc/home_event.dart';
 import 'package:films_viewer/presentation/movies/movies_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class _Tab {
   const _Tab({required this.icon, required this.label, required this.page});

@@ -5,11 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
 
+class SettingsArgument {
+  final MovieCardModel? model;
+  final bool? isFavorite;
+  SettingsArgument(this.model, this.isFavorite);
+}
+
+// ignore: must_be_immutable
 class MovieCard extends StatelessWidget {
   final MovieCardModel? movieCardModel;
   final VoidCallback? onClickFavourite;
   final String textButton;
-  const MovieCard({
+  late bool? isFavorite;
+  MovieCard({
+    this.isFavorite,
     this.movieCardModel,
     this.onClickFavourite,
     required this.textButton,
@@ -20,7 +29,9 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/detail', arguments: movieCardModel);
+          SettingsArgument settingsArgument =
+              SettingsArgument(movieCardModel, isFavorite);
+          Navigator.pushNamed(context, '/detail', arguments: settingsArgument);
         },
         child: Container(
           width: 300,
