@@ -5,11 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingBloc extends Bloc<SettingEvent, SettingState> {
   static const String tagName = 'name';
+  static const String isEnLocaleTag = 'isEnLocale';
 
   SettingBloc() : super(const SettingState()) {
     on<LoadNameEvent>(_onLoadName);
     on<SaveNameEvent>(_onSaveName);
     on<ClearNameEvent>(_onClearName);
+    on<SetEnLocaleEvent>(_onSetEnLocal);
   }
   void _onLoadName(LoadNameEvent event, Emitter<SettingState> emit) async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,5 +29,11 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(tagName);
     emit(state.copyWith(name: ''));
+  }
+
+  void _onSetEnLocal(SetEnLocaleEvent event, Emitter<SettingState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(isEnLocaleTag);
+    emit(state.copyWith(isEnLocale: event.isEnLocale));
   }
 }

@@ -1,16 +1,22 @@
 import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/components/delayed_action.dart';
+import 'package:films_viewer/components/locals/locals.dart';
 import 'package:films_viewer/domain/models/home_model.dart';
+import 'package:films_viewer/locale_bloc/locale_bloc.dart';
+import 'package:films_viewer/locale_bloc/locale_event.dart';
 import 'package:films_viewer/presentation/home/bloc/home_bloc.dart';
 import 'package:films_viewer/presentation/home/bloc/home_event.dart';
 import 'package:films_viewer/presentation/home/bloc/home_state.dart';
 import 'package:films_viewer/presentation/home/movie_card.dart';
+import 'package:films_viewer/presentation/settings/bloc/setting_bloc.dart';
+import 'package:films_viewer/presentation/settings/bloc/setting_event.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
 
 class MoviesScreen extends StatefulWidget {
+  static final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey();
   const MoviesScreen({Key? key}) : super(key: key);
   static const String path = '/movies';
   @override
@@ -19,6 +25,7 @@ class MoviesScreen extends StatefulWidget {
 
 class _MoviesScreenState extends State<MoviesScreen> {
   final TextEditingController textController = TextEditingController();
+  bool isEnLocale = false;
   @override
   void didChangeDependencies() {
     context.read<HomeBloc>().add(LoadDataEvent());
@@ -28,6 +35,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      key: MoviesScreen.globalKey,
       child: Scaffold(
         appBar: AppBar(
           actions: <Widget>[
@@ -42,16 +50,45 @@ class _MoviesScreenState extends State<MoviesScreen> {
           ],
         ),
         resizeToAvoidBottomInset: true,
-        backgroundColor: MovieColors.backgroundBlackColor,
+        backgroundColor: MovieColors.greyColor,
         body: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: isEnLocale,
+                    onChanged: (val) {
+                      isEnLocale = val ?? false;
+                      context.read<LocaleBloc>().add(ChangeLocaleEvent(
+                          isEnLocale
+                              ? availableLocales[enLocale]!
+                              : availableLocales[ruLocale]!));
+                      // context
+                      //     .read<SettingBloc>()
+                      //     .add(SetEnLocaleEvent(isEnLocale: isEnLocale));
+                    },
+                  ),
+                  Flexible(
+                    child: Text(
+                      context.locale.switchLanguage,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
               child: TextField(
                 controller: textController,
                 maxLines: 1,
-                decoration: const InputDecoration(
-                  labelText: MovieLocal.search,
+                decoration: InputDecoration(
+                  labelText: context.locale.search,
                   filled: true,
                   fillColor: Colors.white,
                 ),
@@ -96,9 +133,10 @@ class _MoviesScreenState extends State<MoviesScreen> {
                                             return MovieCard(
                                               isFavorite: isFavourite,
                                               textButton: (isFavourite)
-                                                  ? MovieLocal
-                                                      .deleteFromFavourites
-                                                  : MovieLocal.addInFavourites,
+                                                  ? context.locale
+                                                      .deleteFromFavorites
+                                                  : context
+                                                      .locale.addInFavorites,
                                               onClickFavourite: () {
                                                 context.read<HomeBloc>().add(
                                                       ChangedFavourites(

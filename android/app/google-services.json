@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "226487029797",
+    "project_id": "movies-viewer",
+    "storage_bucket": "movies-viewer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226487029797:android:1efbab134946c7e48c6fcc",
+        "android_client_info": {
+          "package_name": "com.example.films_viewer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226487029797-fodcq3nsmfgjuvo1mja6shk5k50g2n59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgAsBNjdvG0b7xEAmJ_ncqA6Cmr7Q-aOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226487029797-fodcq3nsmfgjuvo1mja6shk5k50g2n59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

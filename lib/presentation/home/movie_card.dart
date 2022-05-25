@@ -4,6 +4,7 @@ import 'package:films_viewer/domain/models/movie_card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:films_viewer/components/locals/locals.dart';
 
 class SettingsArgument {
   final MovieCardModel? model;
@@ -15,13 +16,13 @@ class SettingsArgument {
 class MovieCard extends StatelessWidget {
   final MovieCardModel? movieCardModel;
   final VoidCallback? onClickFavourite;
-  final String textButton;
+  final String? textButton;
   late bool? isFavorite;
   MovieCard({
     this.isFavorite,
     this.movieCardModel,
     this.onClickFavourite,
-    required this.textButton,
+    this.textButton,
     Key? key,
   }) : super(key: key);
 
@@ -79,22 +80,22 @@ class MovieCard extends StatelessWidget {
                 ),
               ),
               Text(
-                _voteAverage(movieCardModel?.voteAverage ?? 0),
+                _voteAverage(context, movieCardModel?.voteAverage ?? 0),
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                '${MovieLocal.language}: ${movieCardModel?.language}',
+                '${context.locale.language}: ${movieCardModel?.language}',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                  '${MovieLocal.runtime}: ${movieCardModel?.runtime.toString()} ${MovieLocal.min}'),
+                  '${context.locale.runtime}: ${movieCardModel?.runtime.toString()} ${context.locale.min}'),
               Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 10),
                 child: Html(data: movieCardModel?.description ?? ''),
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: PrimaryButton(textButton, onPressed: () {
+                child: PrimaryButton(textButton ?? '', onPressed: () {
                   onClickFavourite?.call();
                 }),
               ),
@@ -103,9 +104,9 @@ class MovieCard extends StatelessWidget {
         ));
   }
 
-  String _voteAverage(double voteAverage) {
-    const prefix = MovieLocal.ratingPrefix;
-    const suffix = MovieLocal.ratingSuffix;
+  String _voteAverage(BuildContext context, double voteAverage) {
+    final prefix = context.locale.ratingPrefix;
+    final suffix = context.locale.ratingSuffix;
     final _voteAverage = (voteAverage * 10).toInt();
     return '$prefix $_voteAverage $suffix';
   }

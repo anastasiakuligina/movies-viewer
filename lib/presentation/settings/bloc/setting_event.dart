@@ -18,3 +18,11 @@ class SaveNameEvent extends SettingEvent {
 }
 
 class ClearNameEvent extends SettingEvent {}
+
+class SetEnLocaleEvent extends SettingEvent {
+  final bool isEnLocale;
+  const SetEnLocaleEvent({required this.isEnLocale});
+
+  @override
+  List<Object> get props => [isEnLocale];
+}

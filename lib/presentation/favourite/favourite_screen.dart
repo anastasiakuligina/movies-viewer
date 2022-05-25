@@ -1,9 +1,13 @@
 import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/domain/models/home_model.dart';
+import 'package:films_viewer/locale_bloc/locale_bloc.dart';
+import 'package:films_viewer/locale_bloc/locale_event.dart';
 import 'package:films_viewer/presentation/home/bloc/home_bloc.dart';
 import 'package:films_viewer/presentation/home/bloc/home_event.dart';
 import 'package:films_viewer/presentation/home/bloc/home_state.dart';
 import 'package:films_viewer/presentation/home/movie_card.dart';
+import 'package:films_viewer/presentation/settings/bloc/setting_bloc.dart';
+import 'package:films_viewer/presentation/settings/bloc/setting_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
