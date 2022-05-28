@@ -8,8 +8,6 @@ import 'package:films_viewer/presentation/home/bloc/home_bloc.dart';
 import 'package:films_viewer/presentation/home/bloc/home_event.dart';
 import 'package:films_viewer/presentation/home/bloc/home_state.dart';
 import 'package:films_viewer/presentation/home/movie_card.dart';
-import 'package:films_viewer/presentation/settings/bloc/setting_bloc.dart';
-import 'package:films_viewer/presentation/settings/bloc/setting_event.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,9 +63,6 @@ class _MoviesScreenState extends State<MoviesScreen> {
                           isEnLocale
                               ? availableLocales[enLocale]!
                               : availableLocales[ruLocale]!));
-                      // context
-                      //     .read<SettingBloc>()
-                      //     .add(SetEnLocaleEvent(isEnLocale: isEnLocale));
                     },
                   ),
                   Flexible(

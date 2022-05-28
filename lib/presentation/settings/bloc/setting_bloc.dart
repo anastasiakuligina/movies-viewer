@@ -6,12 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingBloc extends Bloc<SettingEvent, SettingState> {
   static const String tagName = 'name';
   static const String isEnLocaleTag = 'isEnLocale';
+  static const String sortingTypeTag = 'sortingType';
 
   SettingBloc() : super(const SettingState()) {
     on<LoadNameEvent>(_onLoadName);
     on<SaveNameEvent>(_onSaveName);
     on<ClearNameEvent>(_onClearName);
     on<SetEnLocaleEvent>(_onSetEnLocal);
+    on<SortingEvent>(_onSorting);
+    on<LoadSoringType>(_onLoadSortingType);
   }
   void _onLoadName(LoadNameEvent event, Emitter<SettingState> emit) async {
     final prefs = await SharedPreferences.getInstance();
@@ -32,8 +35,21 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   }
 
   void _onSetEnLocal(SetEnLocaleEvent event, Emitter<SettingState> emit) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(isEnLocaleTag);
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.remove(isEnLocaleTag);
     emit(state.copyWith(isEnLocale: event.isEnLocale));
+  }
+
+  void _onSorting(SortingEvent event, Emitter<SettingState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(sortingTypeTag, event.sortingType);
+    emit(state.copyWith(sortingType: event.sortingType));
+  }
+
+  void _onLoadSortingType(
+      LoadSoringType event, Emitter<SettingState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? sortingType = prefs.getString(sortingTypeTag);
+    emit(state.copyWith(sortingType: sortingType));
   }
 }

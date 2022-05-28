@@ -84,7 +84,7 @@ class MovieCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                '${context.locale.language}: ${movieCardModel?.language}',
+                '${context.locale.language}: ${movieCardModel?.movieLanguage().toPrettyString()}',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(

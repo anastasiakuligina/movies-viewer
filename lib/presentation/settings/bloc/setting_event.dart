@@ -26,3 +26,12 @@ class SetEnLocaleEvent extends SettingEvent {
   @override
   List<Object> get props => [isEnLocale];
 }
+
+class SortingEvent extends SettingEvent {
+  final String sortingType;
+  const SortingEvent({required this.sortingType});
+  @override
+  List<Object> get props => [sortingType];
+}
+
+class LoadSoringType extends SettingEvent {}

@@ -30,6 +30,10 @@ class MovieLocal {
   static const String releaseDate = 'Дата выхода';
   static const String noDataTitle = 'Нет данных';
   static const String getDataButtonTitle = 'Получить данные';
+  static const String name = 'название';
+  static const String rating = 'рейтинг';
+  static const String year = 'год';
+  static const String sorting = 'Сортировка';
 }
 
 class MoviePictures {

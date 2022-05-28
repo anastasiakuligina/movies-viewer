@@ -1,4 +1,4 @@
-import 'package:films_viewer/components/buttons/primary_button.dart';
+import 'package:films_viewer/components/constants.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_bloc.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_event.dart';
 import 'package:films_viewer/presentation/settings/bloc/setting_state.dart';
@@ -14,7 +14,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SettingBloc>(
       lazy: false,
-      create: (_) => SettingBloc()..add(LoadNameEvent()),
+      create: (_) => SettingBloc()..add(LoadSoringType()),
       child: const SettingsPageContent(),
     );
   }
@@ -36,25 +36,45 @@ class _SettingsPageContentState extends State<SettingsPageContent> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             BlocBuilder<SettingBloc, SettingState>(
                 buildWhen: (oldState, newState) =>
-                    oldState.name != newState.name,
+                    oldState.sortingType != newState.sortingType,
                 builder: (context, state) {
-                  return Text(state.name ?? '');
+                  return Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          MovieLocal.sorting,
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: DropdownButton<String>(
+                            value: state.sortingType,
+                            items: <String>[
+                              MovieLocal.name,
+                              MovieLocal.rating,
+                              MovieLocal.year
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? value) {
+                              setState(() {
+                                context.read<SettingBloc>().add(SortingEvent(
+                                    sortingType: value ?? MovieLocal.name));
+                              });
+                            },
+                          )),
+                    ],
+                  );
                 }),
-            PrimaryButton('Получить имя', onPressed: () {
-              context.read<SettingBloc>().add(LoadNameEvent());
-            }),
-            PrimaryButton('Сохранить имя', onPressed: () {
-              context
-                  .read<SettingBloc>()
-                  .add(const SaveNameEvent(name: 'alex'));
-            }),
-            PrimaryButton('Очистить имя', onPressed: () {
-              context.read<SettingBloc>().add(ClearNameEvent());
-            }),
             ElevatedButton(
                 onPressed: () {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
