@@ -8,15 +8,14 @@ import 'package:films_viewer/presentation/main_page.dart';
 import 'package:films_viewer/presentation/movies/movies_screen.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_detail_page.dart';
 import 'package:films_viewer/presentation/settings/pages/settings_page.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // FirebaseCrashlytics.instance.crash();
   runApp(const MyApp());
 }
